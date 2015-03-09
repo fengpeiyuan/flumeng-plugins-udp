@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+  	<properties>
+    	<source.encoding>UTF-8</source.encoding>
+        <source.version>1.6</source.version>
+        <target.version>1.6</target.version>
+        <flume.version>1.5.0.1</flume.version>
+  	</properties>
+
+  	<groupId>com.flumeng.plugins</groupId>
+  	<artifactId>flumeng-plugins-udp</artifactId>
+  	<name>Flume UDP Plugins</name>
+  	<version>0.1.0</version>
+  	<packaging>jar</packaging>
+  	<description>Apache Flume plugins with UDP messages</description>
+  	
+	<dependencies>
+	    <dependency>
+	      <groupId>org.apache.flume</groupId>
+	      <artifactId>flume-ng-sdk</artifactId>
+	      <version>${flume.version}</version>
+	    </dependency>
+	    <dependency>
+	      <groupId>org.apache.flume</groupId>
+	      <artifactId>flume-ng-configuration</artifactId>
+	      <version>${flume.version}</version>
+	    </dependency>
+	    <dependency>
+	      <groupId>org.apache.flume</groupId>
+	      <artifactId>flume-ng-core</artifactId>
+	      <version>${flume.version}</version>
+	    </dependency>
+	    <dependency>
+	      <groupId>org.slf4j</groupId>
+	      <artifactId>slf4j-api</artifactId>
+	      <version>1.6.1</version>
+	    </dependency>
+
+	</dependencies>
+
+	<build>
+    	<plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${source.version}</source>
+                    <target>${target.version}</target>
+                    <encoding>${source.encoding}</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+            </plugin>
+        </plugins>
+  	</build>
+
+	
+	<developers>
+        <developer>
+            <name>fengpeiyuan</name>
+            <email>fengpeiyuan@gmail.com</email>
+        </developer>
+    </developers>
+    
+</project>
