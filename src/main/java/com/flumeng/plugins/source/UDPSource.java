@@ -84,7 +84,6 @@ public class UDPSource extends AbstractSource implements EventDrivenSource, Conf
       this.maxSize = maxSize;
       this.delimiter = delimiter;
       this.eventByteContainer = new ByteArrayOutputStream(this.maxSize);
-      logger.debug("## eventByteContainer capicity:{}, config maxSize: {}.", eventByteContainer.size(),maxSize);
     }
 
     @Override
