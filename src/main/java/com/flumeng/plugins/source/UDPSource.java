@@ -77,15 +77,14 @@ public class UDPSource extends AbstractSource implements EventDrivenSource, Conf
   public class UDPChannelHandler extends SimpleChannelHandler {
     protected int maxSize;
     protected char delimiter;
-    protected boolean eventCompleted;
     protected ByteArrayOutputStream eventByteContainer;
 
     public UDPChannelHandler(int maxSize, char delimiter) {
       super();
       this.maxSize = maxSize;
       this.delimiter = delimiter;
-      this.eventCompleted = true;
       this.eventByteContainer = new ByteArrayOutputStream(this.maxSize);
+      logger.debug("## eventByteContainer capicity:{}, config maxSize: {}.", eventByteContainer.size(),maxSize);
     }
 
     @Override
@@ -102,44 +101,35 @@ public class UDPSource extends AbstractSource implements EventDrivenSource, Conf
     	}
     }
 
-
     private Event extractEvent(ChannelBuffer in) {
       byte    b = 0;
       Event   event = null;
       boolean meetDelimiter = false;
-      while (!meetDelimiter && in.readable()) {
+      while (in.readable()) {
           b = in.readByte();
-          if (b == delimiter) {
-        	  event = buildSingleEventFromContainer();
+          if (!meetDelimiter && b == delimiter) {
+        	  byte[] body = eventByteContainer.toByteArray();
+              event = EventBuilder.withBody(body);
+              eventByteContainer.reset();
         	  meetDelimiter = true;
           }else {
         	  eventByteContainer.write(b);
           }
-          if(eventByteContainer.size() == this.maxSize && !meetDelimiter){
-        	  eventCompleted = false;
-        	  event = buildSingleEventFromContainer();
-        	  meetDelimiter = true;
+          
+          if(eventByteContainer.size() == this.maxSize){
+        	   if(!meetDelimiter){
+	        	   logger.warn("Event larger than specified size,container capicity:{}, config maxSize: {}.", eventByteContainer.size(),this.maxSize);
+	        	   eventByteContainer.reset();
+	        	   break;
+        	   }else{
+        		   logger.warn("More than one events received once, except 1st event, the other events capicity is larger than specified size,{}",this.maxSize);
+        		   break;
+        	   }
           }
      }
-
-     if (event == null) {
-    	 meetDelimiter = true;
-          event = buildSingleEventFromContainer();
-     }
-
-      return event;
+     return event;
     }
 
-    private Event buildSingleEventFromContainer() {
-      byte[] body;
-      if (!eventCompleted) {
-        logger.warn("Event larger than specified size: {}.", maxSize);
-      }
-      body = eventByteContainer.toByteArray();
-      eventByteContainer.reset();
-      eventCompleted = false;
-      return EventBuilder.withBody(body);
-    }
 
   }
   
