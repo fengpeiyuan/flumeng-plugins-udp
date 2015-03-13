@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/fengpeiyuan/flumeng-plugins-udp.png)](https://travis-ci.org/fengpeiyuan/flumeng-plugins-udp)
+[![Coverage Status](https://coveralls.io/repos/fengpeiyuan/flumeng-plugins-udp.png/badge.png)](https://coveralls.io/r/fengpeiyuan/flumeng-plugins-udp)
 
 # Flume-ng source plugin of consume udp messages using java nio
 
